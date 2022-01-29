@@ -20,7 +20,7 @@ export default {
     }),
     babel({
       exclude: "node_modules/**",
-      presets: ["@babel/env", "@babel/preset-react"],
+      presets: ["@babel/preset-react"],
     }),
     commonjs(),
     copy({
