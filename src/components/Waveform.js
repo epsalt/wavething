@@ -1,13 +1,11 @@
 import { max } from "d3-array";
 import { select } from "d3-selection";
 import { scaleLinear } from "d3-scale";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
-const Waveform = ({ audioData, barSpacing, barWidth }) => {
-  const ref = useRef();
-
+const Waveform = ({ audioData, barSpacing, barWidth, svgRef }) => {
   useEffect(() => {
-    const svg = select(ref.current);
+    const svg = select(svgRef.current);
     svg.selectAll("*").remove();
 
     if (!audioData) {
@@ -49,7 +47,7 @@ const Waveform = ({ audioData, barSpacing, barWidth }) => {
       .attr("width", bandwidth);
   }, [audioData, barSpacing, barWidth]);
 
-  return <svg ref={ref} />;
+  return <svg ref={svgRef} />;
 };
 
 export default Waveform;

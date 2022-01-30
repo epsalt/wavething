@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import SaveSVG from "./components/SaveSVG";
 import Waveform from "./components/Waveform";
 import WaveformData from "waveform-data";
 
@@ -8,6 +9,7 @@ const App = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [audioData, setAudioData] = useState();
   const [error, setError] = useState();
+  const ref = useRef(null);
 
   useEffect(() => {
     loadAudio();
@@ -65,14 +67,21 @@ const App = () => {
         />
         Bar Spacing
       </p>
-      {error && <p>{error}</p>}
-      <div>
-        <Waveform
-          audioData={audioData}
-          barSpacing={barSpacing}
-          barWidth={barWidth}
-        />
-      </div>
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        <div>
+          <Waveform
+            audioData={audioData}
+            barSpacing={barSpacing}
+            barWidth={barWidth}
+            svgRef={ref}
+          />
+          <p>
+            <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
+          </p>
+        </div>
+      )}
     </div>
   );
 };
