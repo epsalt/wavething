@@ -1,4 +1,4 @@
-import { min, max } from "d3-array";
+import { max } from "d3-array";
 import { select } from "d3-selection";
 import { scaleLinear } from "d3-scale";
 import React, { useEffect, useRef } from "react";
@@ -14,22 +14,23 @@ const Waveform = ({ audioData, barSpacing, barWidth }) => {
       return;
     }
 
-    const waveform = audioData.resample({ width: 512 * (1 - barWidth) });
+    const waveform = audioData.resample({ width: 512 * barWidth });
     const channel = waveform.channel(0);
     const minChannel = channel.min_array();
     const maxChannel = channel.max_array();
+    const amplitude = maxChannel.map((d, i) => Math.max(d - minChannel[i], 1));
 
     const width = 500;
     const height = 500;
 
-    const step = width / maxChannel.length;
+    const step = width / amplitude.length;
     const padding = step * barSpacing;
     const bandwidth = step - padding;
 
-    const x = scaleLinear().domain([0, waveform.length]).range([0, width]);
+    const x = scaleLinear().domain([0, amplitude.length]).range([0, width]);
 
     const y = scaleLinear()
-      .domain([min(minChannel), max(maxChannel)])
+      .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
     svg.attr("width", width).attr("height", height);
@@ -40,11 +41,11 @@ const Waveform = ({ audioData, barSpacing, barWidth }) => {
       .attr("fill", "blue")
       .attr("stroke", "none")
       .selectAll("rect")
-      .data(maxChannel)
+      .data(amplitude)
       .join("rect")
       .attr("x", (_, i) => x(i))
-      .attr("y", (_, i) => y(maxChannel[i]))
-      .attr("height", (d, i) => Math.max(y(minChannel[i]) - y(d), y(0) - y(1)))
+      .attr("y", (d) => y(d))
+      .attr("height", (d) => -y(d) * 2)
       .attr("width", bandwidth);
   }, [audioData, barSpacing, barWidth]);
 

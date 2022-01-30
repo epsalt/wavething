@@ -3,7 +3,7 @@ import Waveform from "./components/Waveform";
 import WaveformData from "waveform-data";
 
 const App = () => {
-  const [barWidth, setBarWidth] = useState(0.8);
+  const [barWidth, setBarWidth] = useState(0.2);
   const [barSpacing, setBarSpacing] = useState(0.5);
   const [selectedFile, setSelectedFile] = useState();
   const [audioData, setAudioData] = useState();
@@ -46,8 +46,8 @@ const App = () => {
       <p>
         <input
           type="range"
-          min="0"
-          max="0.9"
+          min="0.1"
+          max="1"
           step="0.1"
           value={barWidth}
           onChange={(event) => setBarWidth(parseFloat(event.target.value))}
@@ -57,7 +57,7 @@ const App = () => {
       <p>
         <input
           type="range"
-          min="0"
+          min="-0.2"
           max="0.9"
           step="0.1"
           value={barSpacing}
