@@ -3,6 +3,7 @@ import babel from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import copy from "rollup-plugin-copy";
 import replace from "@rollup/plugin-replace";
+import styles from "rollup-plugin-styles";
 
 export default {
   input: "src/index.js",
@@ -10,6 +11,7 @@ export default {
     file: "dist/bundle.js",
     format: "cjs",
     sourcemap: "inline",
+    assetFileNames: "[name]-[hash][extname]",
   },
   plugins: [
     nodeResolve({
@@ -23,6 +25,7 @@ export default {
       presets: ["@babel/preset-react"],
     }),
     commonjs(),
+    styles(),
     copy({
       targets: [
         { src: "public/index.html", dest: "dist" },

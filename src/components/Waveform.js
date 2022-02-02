@@ -1,9 +1,9 @@
 import { max } from "d3-array";
 import { select } from "d3-selection";
-import { scaleLinear } from "d3-scale";
+import { scaleLinear, scaleQuantize } from "d3-scale";
 import React, { useEffect } from "react";
 
-const Waveform = ({ audioData, barSpacing, barWidth, svgRef }) => {
+const Waveform = ({ audioData, barSpacing, barWidth, colors, svgRef }) => {
   useEffect(() => {
     const svg = select(svgRef.current);
     svg.selectAll("*").remove();
@@ -31,12 +31,15 @@ const Waveform = ({ audioData, barSpacing, barWidth, svgRef }) => {
       .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
+    const color = scaleQuantize()
+      .domain([0, max(amplitude)])
+      .range(colors);
+
     svg.attr("width", width).attr("height", height);
 
     svg
       .append("g")
       .attr("transform", () => `translate(0, ${height / 2})`)
-      .attr("fill", "blue")
       .attr("stroke", "none")
       .selectAll("rect")
       .data(amplitude)
@@ -44,8 +47,9 @@ const Waveform = ({ audioData, barSpacing, barWidth, svgRef }) => {
       .attr("x", (_, i) => x(i))
       .attr("y", (d) => y(d))
       .attr("height", (d) => -y(d) * 2)
-      .attr("width", bandwidth);
-  }, [audioData, barSpacing, barWidth]);
+      .attr("width", bandwidth)
+      .attr("fill", (d) => color(d));
+  }, [audioData, barSpacing, barWidth, colors]);
 
   return <svg ref={svgRef} />;
 };

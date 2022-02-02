@@ -16,6 +16,7 @@
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.2",
     "d3-selection": "^2.0.0",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "waveform-data": "^4.3.0"
@@ -30,6 +31,7 @@
     "concurrently": "^7.0.0",
     "rollup": "^2.66.1",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-styles": "^4.0.0",
     "serve": "^13.0.2"
   }
 }
