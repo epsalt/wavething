@@ -3,11 +3,14 @@ import useThrottle from "../utils/useThrottle";
 
 const Palette = ({ colors, setColors }) => {
   const throttleColors = useThrottle(100);
-  const handleChange = useCallback((event, id) => {
-    setColors(
-      colors.map((color, i) => (i !== id ? color : event.target.value))
-    );
-  }, []);
+  const handleChange = useCallback(
+    (event, id) => {
+      setColors(
+        colors.map((color, i) => (i !== id ? color : event.target.value))
+      );
+    },
+    [colors]
+  );
 
   return (
     <form name="palette">
