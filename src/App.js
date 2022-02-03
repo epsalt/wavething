@@ -7,6 +7,7 @@ import WaveformData from "waveform-data";
 const App = () => {
   const [barWidth, setBarWidth] = useState(0.2);
   const [barSpacing, setBarSpacing] = useState(0.5);
+  const [barRounding, setBarRounding] = useState(0);
   const [colors, setColors] = useState([
     "#fc9272",
     "#fb6a4a",
@@ -76,6 +77,18 @@ const App = () => {
         <label htmlFor="spacing">Bar Spacing</label>
       </div>
       <div>
+        <input
+          name="rounding"
+          type="range"
+          min="0"
+          max="0.5"
+          step="0.01"
+          value={barRounding}
+          onChange={(event) => setBarRounding(parseFloat(event.target.value))}
+        />
+        <label htmlFor="rounding">Bar Rounding</label>
+      </div>
+      <div>
         <Palette colors={colors} setColors={setColors} />
       </div>
       {error ? (
@@ -87,6 +100,7 @@ const App = () => {
               audioData={audioData}
               barSpacing={barSpacing}
               barWidth={barWidth}
+              barRounding={barRounding}
               colors={colors}
               svgRef={ref}
             />

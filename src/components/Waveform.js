@@ -3,7 +3,14 @@ import { select } from "d3-selection";
 import { scaleLinear, scaleQuantize } from "d3-scale";
 import React, { useEffect } from "react";
 
-const Waveform = ({ audioData, barSpacing, barWidth, colors, svgRef }) => {
+const Waveform = ({
+  audioData,
+  barSpacing,
+  barWidth,
+  barRounding,
+  colors,
+  svgRef,
+}) => {
   useEffect(() => {
     const svg = select(svgRef.current);
     svg.selectAll("*").remove();
@@ -46,10 +53,11 @@ const Waveform = ({ audioData, barSpacing, barWidth, colors, svgRef }) => {
       .join("rect")
       .attr("x", (_, i) => x(i))
       .attr("y", (d) => y(d))
+      .attr("rx", (d) => -y(d) * barRounding)
       .attr("height", (d) => -y(d) * 2)
       .attr("width", bandwidth)
       .attr("fill", (d) => color(d));
-  }, [audioData, barSpacing, barWidth, colors]);
+  }, [audioData, barSpacing, barWidth, barRounding, colors]);
 
   return <svg ref={svgRef} />;
 };
