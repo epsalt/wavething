@@ -8,6 +8,7 @@ const App = () => {
   const [barWidth, setBarWidth] = useState(0.2);
   const [barSpacing, setBarSpacing] = useState(0.5);
   const [barRounding, setBarRounding] = useState(0);
+  const [ratio, setRatio] = useState(1);
   const [colors, setColors] = useState([
     "#fc9272",
     "#fb6a4a",
@@ -89,6 +90,18 @@ const App = () => {
         <label htmlFor="rounding">Bar Rounding</label>
       </div>
       <div>
+        <input
+          name="ratio"
+          type="range"
+          min="0.1"
+          max="5"
+          step="0.25"
+          value={ratio}
+          onChange={(event) => setRatio(parseFloat(event.target.value))}
+        />
+        <label htmlFor="ratio"> Aspect Ratio</label>
+      </div>
+      <div>
         <Palette colors={colors} setColors={setColors} />
       </div>
       {error ? (
@@ -101,6 +114,7 @@ const App = () => {
               barSpacing={barSpacing}
               barWidth={barWidth}
               barRounding={barRounding}
+              ratio={ratio}
               colors={colors}
               svgRef={ref}
             />

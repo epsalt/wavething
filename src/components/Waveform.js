@@ -8,6 +8,7 @@ const Waveform = ({
   barSpacing,
   barWidth,
   barRounding,
+  ratio,
   colors,
   svgRef,
 }) => {
@@ -25,7 +26,7 @@ const Waveform = ({
     const maxChannel = channel.max_array();
     const amplitude = maxChannel.map((d, i) => Math.max(d - minChannel[i], 1));
 
-    const width = 500;
+    const width = ratio * 500;
     const height = 500;
 
     const step = width / amplitude.length;
@@ -57,7 +58,7 @@ const Waveform = ({
       .attr("height", (d) => -y(d) * 2)
       .attr("width", bandwidth)
       .attr("fill", (d) => color(d));
-  }, [audioData, barSpacing, barWidth, barRounding, colors]);
+  }, [audioData, barSpacing, barWidth, barRounding, colors, ratio]);
 
   return <svg ref={svgRef} />;
 };
