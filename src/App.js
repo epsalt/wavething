@@ -16,6 +16,7 @@ const App = () => {
     "#cb181d",
     "#99000d",
   ]);
+  const [colorType, setColorType] = useState(["hz"]);
   const [selectedFile, setSelectedFile] = useState();
   const [audioData, setAudioData] = useState();
   const [error, setError] = useState();
@@ -104,6 +105,17 @@ const App = () => {
       <div>
         <Palette colors={colors} setColors={setColors} />
       </div>
+      <div onChange={(event) => setColorType(event.target.value)}>
+        <input type="radio" defaultChecked={true} value="hz" name="colorType" />
+        Horizontal
+        <input
+          type="radio"
+          defaultChecked={false}
+          value="vt"
+          name="colorType"
+        />
+        Vertical
+      </div>
       {error ? (
         <p>{error}</p>
       ) : (
@@ -116,6 +128,7 @@ const App = () => {
               barRounding={barRounding}
               ratio={ratio}
               colors={colors}
+              colorType={colorType}
               svgRef={ref}
             />
           </div>

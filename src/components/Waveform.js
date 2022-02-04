@@ -1,6 +1,7 @@
 import { max } from "d3-array";
 import { select } from "d3-selection";
-import { scaleLinear, scaleQuantize } from "d3-scale";
+import { scaleLinear, scaleQuantize, scaleSequential } from "d3-scale";
+import { interpolateRgb, piecewise } from "d3-interpolate";
 import React, { useEffect } from "react";
 
 const Waveform = ({
@@ -10,6 +11,7 @@ const Waveform = ({
   barRounding,
   ratio,
   colors,
+  colorType,
   svgRef,
 }) => {
   useEffect(() => {
@@ -39,9 +41,14 @@ const Waveform = ({
       .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
-    const color = scaleQuantize()
+    const vcolor = scaleQuantize()
       .domain([0, max(amplitude)])
       .range(colors);
+
+    const interpolate = piecewise(interpolateRgb.gamma(2.2), colors);
+    const hcolor = scaleSequential()
+      .domain([0, amplitude.length])
+      .interpolator(interpolate);
 
     svg.attr("width", width).attr("height", height);
 
@@ -57,8 +64,8 @@ const Waveform = ({
       .attr("rx", (d) => -y(d) * barRounding)
       .attr("height", (d) => -y(d) * 2)
       .attr("width", bandwidth)
-      .attr("fill", (d) => color(d));
-  }, [audioData, barSpacing, barWidth, barRounding, colors, ratio]);
+      .attr("fill", (d, i) => (colorType === "vt" ? vcolor(d) : hcolor(i)));
+  }, [audioData, barSpacing, barWidth, barRounding, colors, colorType, ratio]);
 
   return <svg ref={svgRef} />;
 };
