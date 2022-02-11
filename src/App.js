@@ -47,6 +47,10 @@ const App = () => {
         return;
       }
       setError(null);
+
+      if (waveform.length > 1000) {
+        waveform = waveform.resample({ width: 1000 });
+      }
       setAudioData(waveform);
     });
   };
