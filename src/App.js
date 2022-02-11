@@ -2,13 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import Palette from "./components/Palette";
 import SaveSVG from "./components/SaveSVG";
 import Waveform from "./components/Waveform";
+import RadialWaveform from "./components/RadialWaveform";
 import WaveformData from "waveform-data";
 
 const App = () => {
+  const [chartType, setChartType] = useState("linear");
   const [barWidth, setBarWidth] = useState(0.2);
   const [barSpacing, setBarSpacing] = useState(0.5);
   const [barRounding, setBarRounding] = useState(0);
   const [ratio, setRatio] = useState(1);
+  const [radius, setInnerRadius] = useState(0.25);
+  const [rotate, setRotate] = useState(0);
   const [colors, setColors] = useState([
     "#fc9272",
     "#fb6a4a",
@@ -55,16 +59,34 @@ const App = () => {
     <div>
       <input type="file" name="file" onChange={fileChangeHandler} />
       <div>
-        <input
-          name="width"
-          type="range"
-          min="0.1"
-          max="1"
-          step="0.1"
-          value={barWidth}
-          onChange={(event) => setBarWidth(parseFloat(event.target.value))}
-        />
-        <label htmlFor="width">Bar Width</label>
+        <div onChange={(event) => setChartType(event.target.value)}>
+          <input
+            type="radio"
+            defaultChecked={true}
+            value="linear"
+            name="chartType"
+          />
+          Linear
+          <input
+            type="radio"
+            defaultChecked={false}
+            value="radial"
+            name="chartType"
+          />
+          Radial
+        </div>
+        <div>
+          <input
+            name="width"
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.1"
+            value={barWidth}
+            onChange={(event) => setBarWidth(parseFloat(event.target.value))}
+          />
+          <label htmlFor="width">Bar Width</label>
+        </div>
       </div>
       <div>
         <input
@@ -90,18 +112,49 @@ const App = () => {
         />
         <label htmlFor="rounding">Bar Rounding</label>
       </div>
-      <div>
-        <input
-          name="ratio"
-          type="range"
-          min="0.1"
-          max="5"
-          step="0.25"
-          value={ratio}
-          onChange={(event) => setRatio(parseFloat(event.target.value))}
-        />
-        <label htmlFor="ratio"> Aspect Ratio</label>
-      </div>
+      {chartType === "linear" ? (
+        <div>
+          <input
+            name="ratio"
+            type="range"
+            min="0.1"
+            max="5"
+            step="0.25"
+            value={ratio}
+            onChange={(event) => setRatio(parseFloat(event.target.value))}
+          />
+          <label htmlFor="ratio"> Aspect Ratio</label>
+        </div>
+      ) : (
+        <>
+          <div>
+            <input
+              name="radius"
+              type="range"
+              min="0"
+              max="0.9"
+              step="0.05"
+              value={radius}
+              onChange={(event) =>
+                setInnerRadius(parseFloat(event.target.value))
+              }
+            />
+            <label htmlFor="radius"> Radius</label>
+          </div>
+          <div>
+            <input
+              name="rotate"
+              type="range"
+              min="0"
+              max="360"
+              step="20"
+              value={rotate}
+              onChange={(event) => setRotate(parseFloat(event.target.value))}
+            />
+            <label htmlFor="rotate"> Rotate</label>
+          </div>
+        </>
+      )}
       <div>
         <Palette colors={colors} setColors={setColors} />
       </div>
@@ -121,16 +174,31 @@ const App = () => {
       ) : (
         <div>
           <div>
-            <Waveform
-              audioData={audioData}
-              barSpacing={barSpacing}
-              barWidth={barWidth}
-              barRounding={barRounding}
-              ratio={ratio}
-              colors={colors}
-              colorType={colorType}
-              svgRef={ref}
-            />
+            {chartType === "linear" ? (
+              <Waveform
+                audioData={audioData}
+                barSpacing={barSpacing}
+                barWidth={barWidth}
+                barRounding={barRounding}
+                ratio={ratio}
+                colors={colors}
+                colorType={colorType}
+                svgRef={ref}
+              />
+            ) : (
+              <RadialWaveform
+                audioData={audioData}
+                barSpacing={barSpacing}
+                barWidth={barWidth}
+                barRounding={barRounding}
+                ratio={ratio}
+                radius={radius}
+                rotate={rotate}
+                colors={colors}
+                colorType={colorType}
+                svgRef={ref}
+              />
+            )}
           </div>
           <div>
             <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
