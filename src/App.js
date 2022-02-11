@@ -151,7 +151,7 @@ const App = () => {
               type="range"
               min="0"
               max="360"
-              step="20"
+              step="5"
               value={rotate}
               onChange={(event) => setRotate(parseFloat(event.target.value))}
             />
