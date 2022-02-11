@@ -41,11 +41,12 @@ const Waveform = ({
       .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
-    const vcolor = scaleQuantize()
-      .domain([0, max(amplitude)])
-      .range(colors);
-
     const interpolate = piecewise(interpolateRgb.gamma(2.2), colors);
+
+    const vcolor = scaleSequential()
+      .domain([0, max(amplitude)])
+      .interpolator(interpolate);
+
     const hcolor = scaleSequential()
       .domain([0, amplitude.length])
       .interpolator(interpolate);
