@@ -13,19 +13,21 @@ const Palette = ({ colors, setColors }) => {
   );
 
   return (
-    <form name="palette">
-      {colors.map((color, i) => {
-        return (
-          <input
-            key={i}
-            type="color"
-            value={color}
-            onChange={(event) => throttleColors(handleChange, event, i)}
-          />
-        );
-      })}
-      <label htmlFor="palette"> Color Palette</label>
-    </form>
+    <div>
+      <form name="palette">
+        {colors.map((color, i) => {
+          return (
+            <input
+              key={i}
+              type="color"
+              value={color}
+              onChange={(event) => throttleColors(handleChange, event, i)}
+            />
+          );
+        })}
+        <label htmlFor="palette"> Color Palette</label>
+      </form>
+    </div>
   );
 };
 

@@ -4,16 +4,7 @@ import { scaleLinear, scaleSequential } from "d3-scale";
 import { interpolateRgb, piecewise } from "d3-interpolate";
 import React, { useEffect } from "react";
 
-const Waveform = ({
-  audioData,
-  barSpacing,
-  barWidth,
-  barRounding,
-  ratio,
-  colors,
-  colorType,
-  svgRef,
-}) => {
+const Waveform = ({ audioData, chartOpts, svgRef }) => {
   useEffect(() => {
     const svg = select(svgRef.current);
     svg.selectAll("*").remove();
@@ -22,17 +13,17 @@ const Waveform = ({
       return;
     }
 
-    const waveform = audioData.resample({ width: 512 * barWidth });
+    const waveform = audioData.resample({ width: 512 * chartOpts.barWidth });
     const channel = waveform.channel(0);
     const minChannel = channel.min_array();
     const maxChannel = channel.max_array();
     const amplitude = maxChannel.map((d, i) => Math.max(d - minChannel[i], 1));
 
-    const width = ratio * 500;
+    const width = chartOpts.ratio * 500;
     const height = 500;
 
     const step = width / amplitude.length;
-    const padding = step * barSpacing;
+    const padding = step * chartOpts.barSpacing;
     const bandwidth = step - padding;
 
     const x = scaleLinear().domain([0, amplitude.length]).range([0, width]);
@@ -41,7 +32,7 @@ const Waveform = ({
       .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
-    const interpolate = piecewise(interpolateRgb.gamma(2.2), colors);
+    const interpolate = piecewise(interpolateRgb.gamma(2.2), chartOpts.colors);
 
     const vcolor = scaleSequential()
       .domain([0, max(amplitude)])
@@ -62,11 +53,13 @@ const Waveform = ({
       .join("rect")
       .attr("x", (_, i) => x(i))
       .attr("y", (d) => y(d))
-      .attr("rx", (d) => -y(d) * barRounding)
+      .attr("rx", (d) => -y(d) * chartOpts.barRounding)
       .attr("height", (d) => -y(d) * 2)
       .attr("width", bandwidth)
-      .attr("fill", (d, i) => (colorType === "vt" ? vcolor(d) : hcolor(i)));
-  }, [audioData, barSpacing, barWidth, barRounding, colors, colorType, ratio]);
+      .attr("fill", (d, i) =>
+        chartOpts.colorType === "vt" ? vcolor(d) : hcolor(i)
+      );
+  }, [audioData, chartOpts]);
 
   return <svg ref={svgRef} />;
 };

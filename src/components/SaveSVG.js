@@ -31,9 +31,11 @@ const SaveSVG = ({ name, label, svgRef }) => {
   };
 
   return (
-    <a download={name} href={href}>
-      <button onClick={clickHandler}>{label}</button>
-    </a>
+    <div>
+      <a download={name} href={href}>
+        <button onClick={clickHandler}>{label}</button>
+      </a>
+    </div>
   );
 };
 

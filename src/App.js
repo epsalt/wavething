@@ -1,29 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import Palette from "./components/Palette";
-import SaveSVG from "./components/SaveSVG";
-import Waveform from "./components/Waveform";
-import RadialWaveform from "./components/RadialWaveform";
+import React, { useEffect, useRef, useReducer, useState } from "react";
 import WaveformData from "waveform-data";
 
+import {
+  GeneralRanges,
+  LinearRanges,
+  RadialRanges,
+} from "./components/RangeControls";
+import Palette from "./components/Palette";
+import RadialWaveform from "./components/RadialWaveform";
+import SaveSVG from "./components/SaveSVG";
+import Waveform from "./components/Waveform";
+
 const App = () => {
-  const [chartType, setChartType] = useState("linear");
-  const [barWidth, setBarWidth] = useState(0.2);
-  const [barSpacing, setBarSpacing] = useState(0.5);
-  const [barRounding, setBarRounding] = useState(0);
-  const [ratio, setRatio] = useState(1);
-  const [radius, setInnerRadius] = useState(0.25);
-  const [rotate, setRotate] = useState(0);
-  const [colors, setColors] = useState([
-    "#fc9272",
-    "#fb6a4a",
-    "#ef3b2c",
-    "#cb181d",
-    "#99000d",
-  ]);
-  const [colorType, setColorType] = useState(["hz"]);
   const [selectedFile, setSelectedFile] = useState();
   const [audioData, setAudioData] = useState();
   const [error, setError] = useState();
+  const [chartOpts, setChartOpts] = useState({
+    barRounding: 0,
+    barSpacing: 0.5,
+    barWidth: 0.2,
+    chartType: "linear",
+    colorType: "hz",
+    colors: ["#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#99000d"],
+    radius: 0.25,
+    ratio: 1,
+    rotate: 0,
+  });
   const ref = useRef(null);
 
   useEffect(() => {
@@ -55,114 +57,66 @@ const App = () => {
     });
   };
 
-  const fileChangeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  let waveform;
+  let conditionalRange;
+  if (chartOpts.chartType === "linear") {
+    waveform = (
+      <Waveform audioData={audioData} chartOpts={chartOpts} svgRef={ref} />
+    );
+    conditionalRange = (
+      <LinearRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
+    );
+  } else {
+    waveform = (
+      <RadialWaveform
+        audioData={audioData}
+        chartOpts={chartOpts}
+        svgRef={ref}
+      />
+    );
+    conditionalRange = (
+      <RadialRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
+    );
+  }
 
   return (
     <div>
-      <input type="file" name="file" onChange={fileChangeHandler} />
-      <div>
-        <div onChange={(event) => setChartType(event.target.value)}>
-          <input
-            type="radio"
-            defaultChecked={true}
-            value="linear"
-            name="chartType"
-          />
-          Linear
-          <input
-            type="radio"
-            defaultChecked={false}
-            value="radial"
-            name="chartType"
-          />
-          Radial
-        </div>
-        <div>
-          <input
-            name="width"
-            type="range"
-            min="0.1"
-            max="1"
-            step="0.1"
-            value={barWidth}
-            onChange={(event) => setBarWidth(parseFloat(event.target.value))}
-          />
-          <label htmlFor="width">Bar Width</label>
-        </div>
-      </div>
-      <div>
+      <input
+        type="file"
+        name="file"
+        onChange={(event) => setSelectedFile(event.target.files[0])}
+      />
+      <div
+        onChange={(event) =>
+          setChartOpts({ ...chartOpts, chartType: event.target.value })
+        }
+      >
         <input
-          name="spacing"
-          type="range"
-          min="-0.2"
-          max="0.9"
-          step="0.1"
-          value={barSpacing}
-          onChange={(event) => setBarSpacing(parseFloat(event.target.value))}
+          type="radio"
+          defaultChecked={true}
+          value="linear"
+          name="chartType"
         />
-        <label htmlFor="spacing">Bar Spacing</label>
-      </div>
-      <div>
+        Linear
         <input
-          name="rounding"
-          type="range"
-          min="0"
-          max="0.5"
-          step="0.01"
-          value={barRounding}
-          onChange={(event) => setBarRounding(parseFloat(event.target.value))}
+          type="radio"
+          defaultChecked={false}
+          value="radial"
+          name="chartType"
         />
-        <label htmlFor="rounding">Bar Rounding</label>
+        Radial
       </div>
-      {chartType === "linear" ? (
-        <div>
-          <input
-            name="ratio"
-            type="range"
-            min="0.1"
-            max="5"
-            step="0.25"
-            value={ratio}
-            onChange={(event) => setRatio(parseFloat(event.target.value))}
-          />
-          <label htmlFor="ratio"> Aspect Ratio</label>
-        </div>
-      ) : (
-        <>
-          <div>
-            <input
-              name="radius"
-              type="range"
-              min="0"
-              max="0.9"
-              step="0.05"
-              value={radius}
-              onChange={(event) =>
-                setInnerRadius(parseFloat(event.target.value))
-              }
-            />
-            <label htmlFor="radius"> Radius</label>
-          </div>
-          <div>
-            <input
-              name="rotate"
-              type="range"
-              min="0"
-              max="360"
-              step="5"
-              value={rotate}
-              onChange={(event) => setRotate(parseFloat(event.target.value))}
-            />
-            <label htmlFor="rotate"> Rotate</label>
-          </div>
-        </>
-      )}
-      <div>
-        <Palette colors={colors} setColors={setColors} />
-      </div>
-      <div onChange={(event) => setColorType(event.target.value)}>
+      <GeneralRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
+      {conditionalRange}
+      <Palette
+        colors={chartOpts.colors}
+        setColors={(colors) => setChartOpts({ ...chartOpts, colors: colors })}
+      />
+      <div
+        onChange={(event) =>
+          setChartOpts({ ...chartOpts, colorType: event.target.value })
+        }
+      >
         <input type="radio" defaultChecked={true} value="hz" name="colorType" />
         Horizontal
         <input
@@ -177,36 +131,8 @@ const App = () => {
         <p>{error}</p>
       ) : (
         <div>
-          <div>
-            {chartType === "linear" ? (
-              <Waveform
-                audioData={audioData}
-                barSpacing={barSpacing}
-                barWidth={barWidth}
-                barRounding={barRounding}
-                ratio={ratio}
-                colors={colors}
-                colorType={colorType}
-                svgRef={ref}
-              />
-            ) : (
-              <RadialWaveform
-                audioData={audioData}
-                barSpacing={barSpacing}
-                barWidth={barWidth}
-                barRounding={barRounding}
-                ratio={ratio}
-                radius={radius}
-                rotate={rotate}
-                colors={colors}
-                colorType={colorType}
-                svgRef={ref}
-              />
-            )}
-          </div>
-          <div>
-            <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
-          </div>
+          {waveform}
+          <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
         </div>
       )}
     </div>
