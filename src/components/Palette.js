@@ -1,21 +1,24 @@
 import React, { useCallback } from "react";
 import useThrottle from "../utils/useThrottle";
 
-const Palette = ({ colors, setColors }) => {
+const Palette = ({ chartOpts, setChartOpts }) => {
   const throttleColors = useThrottle(100);
   const handleChange = useCallback(
     (event, id) => {
-      setColors(
-        colors.map((color, i) => (i !== id ? color : event.target.value))
-      );
+      setChartOpts({
+        ...chartOpts,
+        colors: chartOpts.colors.map((color, i) =>
+          i !== id ? color : event.target.value
+        ),
+      });
     },
-    [colors]
+    [chartOpts]
   );
 
   return (
     <div>
       <form name="palette">
-        {colors.map((color, i) => {
+        {chartOpts.colors.map((color, i) => {
           return (
             <input
               key={i}

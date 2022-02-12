@@ -108,10 +108,7 @@ const App = () => {
       </div>
       <GeneralRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
       {conditionalRange}
-      <Palette
-        colors={chartOpts.colors}
-        setColors={(colors) => setChartOpts({ ...chartOpts, colors: colors })}
-      />
+      <Palette chartOpts={chartOpts} setChartOpts={setChartOpts} />
       <div
         onChange={(event) =>
           setChartOpts({ ...chartOpts, colorType: event.target.value })
