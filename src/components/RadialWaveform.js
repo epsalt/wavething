@@ -42,7 +42,10 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
       .domain([0, max(amplitude)])
       .range([innerRadius, outerRadius]);
 
-    const interpolate = piecewise(interpolateRgb.gamma(2.2), opts.colors);
+    const interpolate = piecewise(
+      interpolateRgb.gamma(2.2),
+      opts.colors.filter((_, i) => i <= opts.colorCount)
+    );
 
     const vcolor = scaleSequential()
       .domain([0, max(amplitude)])

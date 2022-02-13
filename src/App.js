@@ -22,6 +22,7 @@ const App = () => {
     chartType: "linear",
     colorType: "hz",
     colors: ["#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#99000d"],
+    colorCount: 3,
     radius: 10,
     ratio: 1,
     rotate: 1,

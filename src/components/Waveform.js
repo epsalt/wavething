@@ -37,7 +37,10 @@ const Waveform = ({ audioData, chartOpts, svgRef }) => {
       .domain([-max(amplitude), max(amplitude)])
       .range([height / 2, -height / 2]);
 
-    const interpolate = piecewise(interpolateRgb.gamma(2.2), opts.colors);
+    const interpolate = piecewise(
+      interpolateRgb.gamma(2.2),
+      opts.colors.filter((_, i) => i <= opts.colorCount)
+    );
 
     const vcolor = scaleSequential()
       .domain([0, max(amplitude)])

@@ -19,7 +19,7 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
         }
       />
       <label htmlFor="width">
-        Bar Width <span className="text-gray-500"> - {chartOpts.barWidth}</span>
+        Bar Count <span className="text-gray-500"> - {chartOpts.barWidth}</span>
       </label>
     </div>
     <div>
