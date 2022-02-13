@@ -31,7 +31,7 @@ const SaveSVG = ({ name, label, svgRef }) => {
   };
 
   return (
-    <div className="m-2">
+    <div className="my-3">
       <a download={name} href={href}>
         <button
           type="button"
