@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import WaveformData from "waveform-data";
 
 import {
@@ -16,15 +16,15 @@ const App = () => {
   const [audioData, setAudioData] = useState();
   const [error, setError] = useState();
   const [chartOpts, setChartOpts] = useState({
-    barRounding: 0,
-    barSpacing: 0.5,
-    barWidth: 0.2,
+    barRounding: 1,
+    barSpacing: 9,
+    barWidth: 3,
     chartType: "linear",
     colorType: "hz",
     colors: ["#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#99000d"],
-    radius: 0.25,
+    radius: 10,
     ratio: 1,
-    rotate: 0,
+    rotate: 1,
   });
   const ref = useRef(null);
 
@@ -80,58 +80,78 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="p-4 max-w-screen-sm mx-auto">
+      <h1 className="text-5xl font-bold leading-normal mr-3">Wavething</h1>
+      <p className="text-gray-500">
+        Upload an audio file to visualize volume as a linear or radial chart.
+      </p>
       <input
+        className="mt-5"
         type="file"
+        accept="audio/mp3,audio/*"
         name="file"
         onChange={(event) => setSelectedFile(event.target.files[0])}
       />
+      <hr className="my-5" />
       <div
+        className="my-3"
         onChange={(event) =>
           setChartOpts({ ...chartOpts, chartType: event.target.value })
         }
       >
         <input
+          className="mr-1"
           type="radio"
           defaultChecked={true}
           value="linear"
           name="chartType"
         />
-        Linear
+        <label className="mr-3">Linear</label>
         <input
+          className="mr-1"
           type="radio"
           defaultChecked={false}
           value="radial"
           name="chartType"
         />
-        Radial
+        <label>Radial</label>
       </div>
-      <GeneralRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
-      {conditionalRange}
-      <Palette chartOpts={chartOpts} setChartOpts={setChartOpts} />
-      <div
-        onChange={(event) =>
-          setChartOpts({ ...chartOpts, colorType: event.target.value })
-        }
-      >
-        <input type="radio" defaultChecked={true} value="hz" name="colorType" />
-        Horizontal
-        <input
-          type="radio"
-          defaultChecked={false}
-          value="vt"
-          name="colorType"
-        />
-        Vertical
+      <div>
+        <GeneralRanges chartOpts={chartOpts} setChartOpts={setChartOpts} />
+        {conditionalRange}
       </div>
-      {error ? (
-        <p>{error}</p>
-      ) : (
-        <div>
-          {waveform}
-          <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
+      <div className="my-3">
+        <Palette chartOpts={chartOpts} setChartOpts={setChartOpts} />
+      </div>
+      <div>
+        <div
+          className="my-3"
+          onChange={(event) =>
+            setChartOpts({ ...chartOpts, colorType: event.target.value })
+          }
+        >
+          <label className="block text-gray-500 text-sm">Color Blending</label>
+          <input
+            className="mr-1"
+            type="radio"
+            defaultChecked={true}
+            value="hz"
+            name="colorType"
+          />
+          <label className="mr-3">Horizontal</label>
+          <input
+            className="mr-1"
+            type="radio"
+            defaultChecked={false}
+            value="vt"
+            name="colorType"
+          />
+          <label>Vertical</label>
         </div>
-      )}
+      </div>
+      <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
+      <hr className="my-5" />
+      {error ? <p>{error}</p> : <div className="pb-[100px]">{waveform}</div>}
     </div>
   );
 };

@@ -28,7 +28,6 @@ const Palette = ({ chartOpts, setChartOpts }) => {
             />
           );
         })}
-        <label htmlFor="palette"> Color Palette</label>
       </form>
     </div>
   );

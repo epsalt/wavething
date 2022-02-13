@@ -5,8 +5,12 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "rollup --config --watch",
-    "build": "rollup --config",
+    "build": "concurrently npm:ru:build npm:tw:build",
+    "watch": "concurrently npm:ru:watch npm:tw:watch",
+    "ru:build": "rollup --config",
+    "ru:watch": "rollup --config --watch",
+    "tw:build": "tailwindcss build -i ./src/styles.css -o ./dist/styles.css",
+    "tw:watch": "tailwindcss build -i ./src/styles.css -o ./dist/styles.css --watch",
     "start": "concurrently npm:watch npm:serve",
     "serve": "serve dist"
   },
@@ -34,6 +38,7 @@
     "rollup": "^2.66.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-styles": "^4.0.0",
-    "serve": "^13.0.2"
+    "serve": "^13.0.2",
+    "tailwindcss": "^3.0.22"
   }
 }

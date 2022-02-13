@@ -1,9 +1,12 @@
+import React, { useEffect } from "react";
+
 import { max } from "d3-array";
 import { select } from "d3-selection";
 import { scaleLinear, scaleRadial, scaleSequential } from "d3-scale";
 import { arc } from "d3-shape";
 import { interpolateRgb, piecewise } from "d3-interpolate";
-import React, { useEffect } from "react";
+
+import scaleChartOpts from "../utils/scaleChartOpts";
 
 const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
   useEffect(() => {
@@ -14,7 +17,9 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
       return;
     }
 
-    const waveform = audioData.resample({ width: 512 * chartOpts.barWidth });
+    const opts = scaleChartOpts(chartOpts);
+
+    const waveform = audioData.resample({ width: 512 * opts.barWidth });
     const channel = waveform.channel(0);
     const minChannel = channel.min_array();
     const maxChannel = channel.max_array();
@@ -24,10 +29,10 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
     const height = 500;
 
     const outerRadius = Math.min(width, height) / 2;
-    const innerRadius = outerRadius * chartOpts.radius;
+    const innerRadius = outerRadius * opts.radius;
 
     const step = (Math.PI * 2) / amplitude.length;
-    const padding = step * chartOpts.barSpacing;
+    const padding = step * opts.barSpacing;
 
     const x = scaleLinear()
       .domain([0, amplitude.length])
@@ -37,7 +42,7 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
       .domain([0, max(amplitude)])
       .range([innerRadius, outerRadius]);
 
-    const interpolate = piecewise(interpolateRgb.gamma(2.2), chartOpts.colors);
+    const interpolate = piecewise(interpolateRgb.gamma(2.2), opts.colors);
 
     const vcolor = scaleSequential()
       .domain([0, max(amplitude)])
@@ -56,11 +61,11 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
       .endAngle((_, i) => x(i) + step)
       .padAngle(padding)
       .padRadius(innerRadius)
-      .cornerRadius((d) => y(d) * step * chartOpts.barRounding);
+      .cornerRadius((d) => y(d) * step * opts.barRounding);
 
     svg
       .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
-      .attr("transform", "rotate(" + chartOpts.rotate + ")")
+      .attr("transform", "rotate(" + opts.rotate + ")")
       .append("g")
       .attr("stroke", "none")
       .selectAll("path")
@@ -68,7 +73,7 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
       .join("path")
       .attr("d", arcPath)
       .attr("fill", (d, i) =>
-        chartOpts.colorType === "vt" ? vcolor(d) : hcolor(i)
+        opts.colorType === "vt" ? vcolor(d) : hcolor(i)
       );
   }, [audioData, chartOpts]);
 
