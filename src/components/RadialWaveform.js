@@ -44,16 +44,23 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
 
     const interpolate = piecewise(
       interpolateRgb.gamma(2.2),
-      opts.colors.filter((_, i) => i <= opts.colorCount)
+      opts.colors.filter((_, i) => i < opts.colorCount)
     );
 
-    const vcolor = scaleSequential()
-      .domain([0, max(amplitude)])
-      .interpolator(interpolate);
+    let vcolor;
+    let hcolor;
+    if (opts.colorCount > 1) {
+      vcolor = scaleSequential()
+        .domain([0, max(amplitude)])
+        .interpolator(interpolate);
 
-    const hcolor = scaleSequential()
-      .domain([0, amplitude.length])
-      .interpolator(interpolate);
+      hcolor = scaleSequential()
+        .domain([0, amplitude.length])
+        .interpolator(interpolate);
+    } else {
+      vcolor = (_) => opts.colors[0];
+      hcolor = vcolor;
+    }
 
     svg.attr("width", width).attr("height", height);
 
