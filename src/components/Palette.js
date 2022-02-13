@@ -1,14 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+
+import { ChromePicker } from "react-color";
+
 import useThrottle from "../utils/useThrottle";
 
 const Palette = ({ chartOpts, setChartOpts }) => {
+  const [currentColor, setCurrentColor] = useState(0);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   const throttleColors = useThrottle(100);
   const handleChange = useCallback(
-    (event, id) => {
+    (pickedColor) => {
       setChartOpts({
         ...chartOpts,
         colors: chartOpts.colors.map((color, i) =>
-          i !== id ? color : event.target.value
+          i !== currentColor ? color : pickedColor.hex
         ),
       });
     },
@@ -33,9 +39,21 @@ const Palette = ({ chartOpts, setChartOpts }) => {
     }
   };
 
+  const launchPicker = (i, event) => {
+    setPickerOpen(true);
+    setCurrentColor(i);
+  };
+
+  const handleColorChange = (color) => {
+    setChartOpts({
+      ...chartOpts,
+      colors: colors.map(),
+    });
+  };
+
   return (
     <div>
-      <div>
+      <div className="flex items-center">
         <button
           onClick={handleDecrement}
           disabled={chartOpts.colorCount == 1}
@@ -54,16 +72,38 @@ const Palette = ({ chartOpts, setChartOpts }) => {
           .filter((_, i) => i < chartOpts.colorCount)
           .map((color, i) => {
             return (
-              <input
-                className="mr-2 cursor-pointer"
+              <div
+                className="inline-block border mr-2 p-1 rounded cursor-pointer"
                 key={i}
-                type="color"
-                value={color}
-                onChange={(event) => throttleColors(handleChange, event, i)}
-              />
+                onClick={(e) => launchPicker(i, e)}
+              >
+                <div
+                  style={{ backgroundColor: color }}
+                  className="w-10 h-5 rounded"
+                  onChange={(event) => throttleColors(handleChange, event, i)}
+                />
+              </div>
             );
           })}
       </div>
+      {pickerOpen && (
+        <div className="absolute z-10">
+          <div
+            className="fixed inset-0"
+            onClick={(_) => setPickerOpen(false)}
+          ></div>
+          <div
+            style={{ marginLeft: `${96 + currentColor * 58}px` }}
+            className="mt-3"
+          >
+            <ChromePicker
+              color={chartOpts.colors[currentColor]}
+              onChange={(color) => handleChange(color)}
+              disableAlpha={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
