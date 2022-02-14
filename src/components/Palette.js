@@ -21,7 +21,7 @@ const Palette = ({ chartOpts, setChartOpts }) => {
     [chartOpts, currentColor]
   );
 
-  const handleIncrement = (event) => {
+  const handleIncrement = () => {
     if (chartOpts.colorCount < chartOpts.colors.length) {
       setChartOpts({
         ...chartOpts,
@@ -30,7 +30,7 @@ const Palette = ({ chartOpts, setChartOpts }) => {
     }
   };
 
-  const handleDecrement = (event) => {
+  const handleDecrement = () => {
     if (chartOpts.colorCount > 1) {
       setChartOpts({
         ...chartOpts,
@@ -39,16 +39,9 @@ const Palette = ({ chartOpts, setChartOpts }) => {
     }
   };
 
-  const launchPicker = (i, event) => {
+  const launchPicker = (i, _) => {
     setPickerOpen(true);
     setCurrentColor(i);
-  };
-
-  const handleColorChange = (color) => {
-    setChartOpts({
-      ...chartOpts,
-      colors: colors.map(),
-    });
   };
 
   return (
@@ -57,14 +50,14 @@ const Palette = ({ chartOpts, setChartOpts }) => {
         <button
           onClick={handleDecrement}
           disabled={chartOpts.colorCount == 1}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1"
+          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1 flex items-center"
         >
           <span className="m-auto text-2xl font-light">−</span>
         </button>
         <button
           onClick={handleIncrement}
           disabled={chartOpts.colorCount == chartOpts.colors.length}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3"
+          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3 flex items-center"
         >
           <span className="m-auto text-2xl font-light">+</span>
         </button>
