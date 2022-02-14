@@ -18,7 +18,7 @@ const Palette = ({ chartOpts, setChartOpts }) => {
         ),
       });
     },
-    [chartOpts]
+    [chartOpts, currentColor]
   );
 
   const handleIncrement = (event) => {
