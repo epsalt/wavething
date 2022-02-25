@@ -25,8 +25,8 @@ const RadialWaveform = ({ audioData, chartOpts, svgRef }) => {
     const maxChannel = channel.max_array();
     const amplitude = maxChannel.map((d, i) => Math.max(d - minChannel[i], 1));
 
-    const width = 500;
-    const height = 500;
+    const width = Math.min(window.visualViewport.width - 25, 500);
+    const height = width;
 
     const outerRadius = Math.min(width, height) / 2;
     const innerRadius = outerRadius * opts.radius;
