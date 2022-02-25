@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "concurrently npm:ru:build npm:tw:build",
     "watch": "concurrently npm:ru:watch npm:tw:watch",
-    "ru:build": "rollup --config",
+    "ru:build": "NODE_ENV=production rollup --config",
     "ru:watch": "rollup --config --watch",
     "tw:build": "tailwindcss build -i ./src/styles.css -o ./dist/styles.css",
     "tw:watch": "tailwindcss build -i ./src/styles.css -o ./dist/styles.css --watch",
