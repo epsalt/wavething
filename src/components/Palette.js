@@ -50,14 +50,14 @@ const Palette = ({ chartOpts, setChartOpts }) => {
         <button
           onClick={handleDecrement}
           disabled={chartOpts.colorCount == 1}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1 flex items-center"
+          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1"
         >
           <span className="m-auto text-2xl font-light">−</span>
         </button>
         <button
           onClick={handleIncrement}
           disabled={chartOpts.colorCount == chartOpts.colors.length}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3 flex items-center"
+          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3"
         >
           <span className="m-auto text-2xl font-light">+</span>
         </button>
@@ -72,7 +72,7 @@ const Palette = ({ chartOpts, setChartOpts }) => {
               >
                 <div
                   style={{ backgroundColor: color }}
-                  className="w-10 h-5 rounded"
+                  className="md:w-10 md:h-5 w-6 h-5 rounded"
                   onChange={(event) => throttleColors(handleChange, event, i)}
                 />
               </div>
@@ -85,10 +85,7 @@ const Palette = ({ chartOpts, setChartOpts }) => {
             className="fixed inset-0"
             onClick={(_) => setPickerOpen(false)}
           ></div>
-          <div
-            style={{ marginLeft: `${96 + currentColor * 58}px` }}
-            className="mt-3"
-          >
+          <div className="mt-3">
             <ChromePicker
               color={chartOpts.colors[currentColor]}
               onChange={(color) => handleChange(color)}

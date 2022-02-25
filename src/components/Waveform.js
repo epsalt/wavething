@@ -24,8 +24,8 @@ const Waveform = ({ audioData, chartOpts, svgRef }) => {
     const maxChannel = channel.max_array();
     const amplitude = maxChannel.map((d, i) => Math.max(d - minChannel[i], 1));
 
-    const width = 500;
-    const height = 500 * opts.ratio;
+    const width = Math.min(window.visualViewport.width - 25, 500);
+    const height = width * opts.ratio;
 
     const step = width / amplitude.length;
     const padding = step * opts.barSpacing;

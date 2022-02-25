@@ -2,9 +2,9 @@ import React from "react";
 
 const GeneralRanges = ({ chartOpts, setChartOpts }) => (
   <>
-    <div>
+    <div className="flex flex-wrap-reverse mb-3">
       <input
-        className="mb-3 mr-3 w-64"
+        className="mr-3 w-64"
         name="width"
         type="range"
         min="1"
@@ -18,13 +18,13 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
           })
         }
       />
-      <label htmlFor="width">
+      <label htmlFor="width" className="sm:basis-auto basis-full">
         Bar Count <span className="text-gray-500"> - {chartOpts.barWidth}</span>
       </label>
     </div>
-    <div>
+    <div className="flex flex-wrap-reverse mb-3">
       <input
-        className="mb-3 mr-3 w-64"
+        className="mr-3 w-64"
         name="spacing"
         type="range"
         min="1"
@@ -38,14 +38,14 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
           })
         }
       />
-      <label htmlFor="spacing">
+      <label htmlFor="spacing" className="sm:basis-auto basis-full">
         Bar Spacing{" "}
         <span className="text-gray-500"> - {chartOpts.barSpacing}</span>
       </label>
     </div>
-    <div>
+    <div className="flex flex-wrap-reverse mb-3">
       <input
-        className="mb-3 mr-3 w-64"
+        className="mr-3 w-64"
         name="rounding"
         type="range"
         min="1"
@@ -59,7 +59,7 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
           })
         }
       />
-      <label htmlFor="rounding">
+      <label htmlFor="rounding" className="sm:basis-auto basis-full">
         Bar Rounding{" "}
         <span className="text-gray-500"> - {chartOpts.barRounding}</span>
       </label>
@@ -68,9 +68,9 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
 );
 
 const LinearRanges = ({ chartOpts, setChartOpts }) => (
-  <div>
+  <div className="flex flex-wrap-reverse mb-3">
     <input
-      className="mb-3 mr-3 w-64"
+      className="mr-3 w-64"
       name="ratio"
       type="range"
       min="0.025"
@@ -84,7 +84,7 @@ const LinearRanges = ({ chartOpts, setChartOpts }) => (
         })
       }
     />
-    <label htmlFor="ratio">
+    <label htmlFor="ratio" className="sm:basis-auto basis-full">
       Aspect Ratio <span className="text-gray-500"> - {chartOpts.ratio}</span>
     </label>
   </div>
@@ -92,9 +92,9 @@ const LinearRanges = ({ chartOpts, setChartOpts }) => (
 
 const RadialRanges = ({ chartOpts, setChartOpts }) => (
   <>
-    <div>
+    <div className="flex flex-wrap-reverse mb-3">
       <input
-        className="mb-3 mr-3 w-64"
+        className="mr-3 w-64"
         name="radius"
         type="range"
         min="1"
@@ -108,13 +108,13 @@ const RadialRanges = ({ chartOpts, setChartOpts }) => (
           })
         }
       />
-      <label htmlFor="radius">
+      <label htmlFor="radius" className="sm:basis-auto basis-full">
         Radius <span className="text-gray-500"> - {chartOpts.radius}</span>
       </label>
     </div>
-    <div>
+    <div className="flex flex-wrap-reverse mb-3">
       <input
-        className="mb-3 mr-3 w-64"
+        className="mr-3 w-64"
         name="rotate"
         type="range"
         min="1"
@@ -128,7 +128,7 @@ const RadialRanges = ({ chartOpts, setChartOpts }) => (
           })
         }
       />
-      <label htmlFor="rotate">
+      <label htmlFor="rotate" className="sm:basis-auto basis-full">
         Rotate <span className="text-gray-500"> - {chartOpts.rotate}</span>
       </label>
     </div>
