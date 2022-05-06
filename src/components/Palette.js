@@ -46,38 +46,42 @@ const Palette = ({ chartOpts, setChartOpts }) => {
 
   return (
     <div>
-      <div className="flex items-center">
-        <button
-          onClick={handleDecrement}
-          disabled={chartOpts.colorCount == 1}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1"
-        >
-          <span className="m-auto text-2xl font-light">−</span>
-        </button>
-        <button
-          onClick={handleIncrement}
-          disabled={chartOpts.colorCount == chartOpts.colors.length}
-          className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3"
-        >
-          <span className="m-auto text-2xl font-light">+</span>
-        </button>
-        {chartOpts.colors
-          .filter((_, i) => i < chartOpts.colorCount)
-          .map((color, i) => {
-            return (
-              <div
-                className="inline-block border mr-2 p-1 rounded cursor-pointer"
-                key={i}
-                onClick={(e) => launchPicker(i, e)}
-              >
+      <div className="flex">
+        <div className="flex h-8">
+          <button
+            onClick={handleDecrement}
+            disabled={chartOpts.colorCount == 1}
+            className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-l cursor-pointer disabled:cursor-not-allowed mr-1"
+          >
+            <span className="m-auto text-2xl font-light">−</span>
+          </button>
+          <button
+            onClick={handleIncrement}
+            disabled={chartOpts.colorCount == chartOpts.colors.length}
+            className="bg-gray-300 text-gray-600 hover:bg-gray-400 w-10 rounded-r cursor-pointer disabled:cursor-not-allowed mr-3"
+          >
+            <span className="m-auto text-2xl font-light">+</span>
+          </button>
+        </div>
+        <div className="flex items-center flex-wrap gap-y-1">
+          {chartOpts.colors
+            .filter((_, i) => i < chartOpts.colorCount)
+            .map((color, i) => {
+              return (
                 <div
-                  style={{ backgroundColor: color }}
-                  className="md:w-10 md:h-5 w-6 h-5 rounded"
-                  onChange={(event) => throttleColors(handleChange, event, i)}
-                />
-              </div>
-            );
-          })}
+                  className="inline-block border mr-2 p-1 rounded cursor-pointer"
+                  key={i}
+                  onClick={(e) => launchPicker(i, e)}
+                >
+                  <div
+                    style={{ backgroundColor: color }}
+                    className="md:w-10 md:h-5 w-6 h-5 rounded"
+                    onChange={(event) => throttleColors(handleChange, event, i)}
+                  />
+                </div>
+              );
+            })}
+        </div>
       </div>
       {pickerOpen && (
         <div className="absolute z-10">
