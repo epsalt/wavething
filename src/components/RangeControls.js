@@ -14,7 +14,7 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
         onChange={(event) =>
           setChartOpts({
             ...chartOpts,
-            barWidth: event.target.value,
+            barWidth: parseInt(event.target.value),
           })
         }
       />
@@ -34,7 +34,7 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
         onChange={(event) =>
           setChartOpts({
             ...chartOpts,
-            barSpacing: event.target.value,
+            barSpacing: parseInt(event.target.value),
           })
         }
       />
@@ -55,7 +55,7 @@ const GeneralRanges = ({ chartOpts, setChartOpts }) => (
         onChange={(event) =>
           setChartOpts({
             ...chartOpts,
-            barRounding: event.target.value,
+            barRounding: parseInt(event.target.value),
           })
         }
       />
@@ -80,7 +80,7 @@ const LinearRanges = ({ chartOpts, setChartOpts }) => (
       onChange={(event) =>
         setChartOpts({
           ...chartOpts,
-          ratio: event.target.value,
+          ratio: parseFloat(event.target.value),
         })
       }
     />
@@ -104,7 +104,7 @@ const RadialRanges = ({ chartOpts, setChartOpts }) => (
         onChange={(event) =>
           setChartOpts({
             ...chartOpts,
-            radius: event.target.value,
+            radius: parseInt(event.target.value),
           })
         }
       />
@@ -124,7 +124,7 @@ const RadialRanges = ({ chartOpts, setChartOpts }) => (
         onChange={(event) =>
           setChartOpts({
             ...chartOpts,
-            rotate: event.target.value,
+            rotate: parseInt(event.target.value),
           })
         }
       />

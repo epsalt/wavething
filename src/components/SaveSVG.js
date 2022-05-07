@@ -31,31 +31,29 @@ const SaveSVG = ({ name, label, svgRef }) => {
   };
 
   return (
-    <div className="my-3">
-      <a download={name} href={href}>
-        <button
-          type="button"
-          onClick={clickHandler}
-          className="inline-block px-6 pt-2.5 pb-2 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex align-center"
+    <a download={name} href={href}>
+      <button
+        type="button"
+        onClick={clickHandler}
+        className="inline-block px-6 pt-2.5 pb-2 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex align-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-4 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-4 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
-          {label}
-        </button>
-      </a>
-    </div>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
+        </svg>
+        {label}
+      </button>
+    </a>
   );
 };
 

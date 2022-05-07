@@ -9,13 +9,17 @@ import {
 import Palette from "./components/Palette";
 import RadialWaveform from "./components/RadialWaveform";
 import SaveSVG from "./components/SaveSVG";
+import SaveConfig from "./components/SaveConfig";
+import LoadConfig from "./components/LoadConfig";
+import LoadAudio from "./components/LoadAudio";
 import Waveform from "./components/Waveform";
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [audioData, setAudioData] = useState();
-  const [error, setError] = useState();
+  const [error, setError] = useState([]);
   const [chartOpts, setChartOpts] = useState({
+    configVersion: "0.1",
     barRounding: 1,
     barSpacing: 9,
     barWidth: 3,
@@ -62,11 +66,11 @@ const App = () => {
 
     WaveformData.createFromAudio(options, (err, waveform) => {
       if (err) {
-        setError("Could not read audio file");
+        setError([...error, "Could not read audio file"]);
         setAudioData(null);
         return;
       }
-      setError(null);
+      setError(error.filter((error) => error != "Could not read audio file"));
 
       if (waveform.length > 1000) {
         waveform = waveform.resample({ width: 1000 });
@@ -97,20 +101,20 @@ const App = () => {
     );
   }
 
+  const errors = (
+    <div role="alert">
+      {error.map((e, i) => (
+        <div class="border border-red-400 rounded bg-red-100 px-4 py-3 text-red-700 mb-2">
+          <p>{e}</p>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="p-4 max-w-screen-sm mx-auto">
+    <div className="p-4 max-w-screen-sm mx-auto pb-[100px]">
       <h1 className="text-5xl font-bold leading-normal mr-3">Wavething</h1>
-      <p className="text-gray-500">
-        Upload an audio file to visualize volume as a linear or radial chart.
-      </p>
-      <input
-        className="mt-5"
-        type="file"
-        accept="audio/mp3,audio/*"
-        name="file"
-        onChange={(event) => setSelectedFile(event.target.files[0])}
-      />
-      <hr className="my-5" />
+      <LoadAudio setSelectedFile={setSelectedFile} />
       <div
         className="my-3"
         onChange={(event) =>
@@ -142,34 +146,45 @@ const App = () => {
         <Palette chartOpts={chartOpts} setChartOpts={setChartOpts} />
       </div>
       <div>
-        <div
-          className="my-3"
-          onChange={(event) =>
-            setChartOpts({ ...chartOpts, colorType: event.target.value })
-          }
-        >
+        <div className="my-3">
           <label className="block text-gray-500 text-sm">Color Blending</label>
           <input
             className="mr-1"
             type="radio"
-            defaultChecked={true}
+            checked={chartOpts.colorType == "hz"}
             value="hz"
             name="colorType"
+            onChange={(event) =>
+              setChartOpts({ ...chartOpts, colorType: event.target.value })
+            }
           />
           <label className="mr-3">Horizontal</label>
           <input
             className="mr-1"
             type="radio"
-            defaultChecked={false}
+            checked={chartOpts.colorType == "vt"}
             value="vt"
             name="colorType"
+            onChange={(event) =>
+              setChartOpts({ ...chartOpts, colorType: event.target.value })
+            }
           />
           <label>Vertical</label>
         </div>
       </div>
-      <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
+      <hr className="my-3" />
+      <LoadConfig
+        chartOpts={chartOpts}
+        setChartOpts={setChartOpts}
+        error={error}
+        setError={setError}
+      />
+      <div className="flex gap-2">
+        <SaveSVG label="Save SVG" name="waveform" svgRef={ref} />
+        <SaveConfig label="Save Config" name="wavething" obj={chartOpts} />
+      </div>
       <hr className="my-5" />
-      {error ? <p>{error}</p> : <div className="pb-[100px]">{waveform}</div>}
+      {error.length > 0 ? errors : <div className="pb-[100px]">{waveform}</div>}
     </div>
   );
 };
